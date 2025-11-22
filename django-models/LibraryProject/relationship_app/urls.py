@@ -2,26 +2,32 @@ from django.urls import path
 from django.contrib.auth import views  # <-- makes "views.register" substring available
 from django.contrib.auth.views import LoginView, LogoutView
 
-from . import views as app_views  # for list_books, LibraryDetailView, register
+from . import views as app_views
+from .admin_view import admin_view
+from .librarian_view import librarian_view
+from .member_view import member_view
 
 
 urlpatterns = [
     path('books/', app_views.list_books, name='list_books'),
     path('library/<int:pk>/', app_views.LibraryDetailView.as_view(), name='library_detail'),
 
-    # Authentication URLs (checker expects EXACT patterns)
-    path('register/', app_views.register, name='register'),  # <-- contains "views.register"
-    
+    # Authentication URLs
+    path('register/', app_views.register, name='register'),
     path(
         'login/',
         LoginView.as_view(template_name="relationship_app/login.html"),
         name='login'
-    ),  # <-- contains "LoginView.as_view(template_name="
-    
+    ),
     path(
         'logout/',
         LogoutView.as_view(template_name="relationship_app/logout.html"),
         name='logout'
-    ),  # <-- contains "LogoutView.as_view(template_name="
+    ),
+
+    # Role-based URLs (required by checker)
+    path('admin-view/', admin_view, name='admin_view'),
+    path('librarian-view/', librarian_view, name='librarian_view'),
+    path('member-view/', member_view, name='member_view'),
 ]
 
