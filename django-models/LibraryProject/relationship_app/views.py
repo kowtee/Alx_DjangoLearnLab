@@ -105,8 +105,7 @@ def librarian_view(request):
 # ----- MEMBER ROLE -----
 
 def is_member(user):
-    return user.is_authenticated and user.userprofile.role == 'Member'
-
+    return user.userprofile.role == "Member"
 
 @user_passes_test(is_member)
 def member_view(request):
