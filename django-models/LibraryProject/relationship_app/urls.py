@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth import views  # <-- makes "views.register" substring available
 from django.contrib.auth.views import LoginView, LogoutView
 
+from .views import add_book, edit_book, delete_book
 from . import views as app_views
 from .admin_view import admin_view
 from .librarian_view import librarian_view
@@ -29,5 +30,15 @@ urlpatterns = [
     path('admin-view/', admin_view, name='admin_view'),
     path('librarian-view/', librarian_view, name='librarian_view'),
     path('member-view/', member_view, name='member_view'),
+
+    # Book CRUD with permissions (REQUIRED)
+    path('books/add/', add_book, name='add_book'),
+    path('books/<int:book_id>/edit/', edit_book, name='edit_book'),
+    path('books/<int:book_id>/delete/', delete_book, name='delete_book'),
+
+
+
+
 ]
+
 

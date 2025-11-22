@@ -6,6 +6,7 @@ from django.views.generic.detail import DetailView  # <-- checker requires this
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required
 
 
 # ---------------------------------------
@@ -110,4 +111,20 @@ def is_member(user):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
+
+# =====================================================
+# BOOK PERMISSION VIEWS (Checker-required)
+# =====================================================
+
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    return HttpResponse("Add book view accessed.")
+
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, book_id):
+    return HttpResponse(f"Edit book {book_id} view accessed.")
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, book_id):
+    return HttpResponse(f"Delete book {book_id} view accessed.")
 
