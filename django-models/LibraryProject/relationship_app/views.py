@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Library
 from .models import Book
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView
+from django.views.generic import ListView
+
 
 # ---------------------------------------
 # FUNCTION-BASED VIEW
