@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from LibraryProject.relationship_app.models import Book, Library
-from django.views.generic import DetailView
+from .models import Book, Library
+from django.views.generic import DetailView, ListView
 
 # ---------------------------------------
 # FUNCTION-BASED VIEW
