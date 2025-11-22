@@ -6,6 +6,7 @@ from django.views.generic.detail import DetailView  # <-- checker requires this
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 
+
 # ---------------------------------------
 # FUNCTION-BASED VIEW
 # ---------------------------------------
@@ -32,10 +33,10 @@ class LibraryDetailView(DetailView):
 
 
 # ---------------------------------------
-# USER AUTHENTICATION VIEWS
+# AUTHENTICATION VIEWS
 # ---------------------------------------
 
-def register_view(request):
+def register(request):
     """
     User registration view.
     """
@@ -47,6 +48,7 @@ def register_view(request):
             return redirect('list_books')
     else:
         form = UserCreationForm()
+
     return render(request, 'relationship_app/register.html', {'form': form})
 
 
@@ -62,6 +64,7 @@ def login_view(request):
             return redirect('list_books')
     else:
         form = AuthenticationForm()
+
     return render(request, 'relationship_app/login.html', {'form': form})
 
 
