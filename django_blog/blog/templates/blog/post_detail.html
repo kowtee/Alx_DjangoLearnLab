@@ -1,0 +1,22 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+
+<article>
+    <h2>{{ post.title }}</h2>
+    <p>By {{ post.author }} • {{ post.published_date }}</p>
+    <p>{{ post.content }}</p>
+</article>
+
+<hr />
+
+<a href="{% url 'post-list' %}">Back to posts</a>
+
+{% if user.is_authenticated and user == post.author %}
+    | <a href="{% url 'post-update' post.pk %}">Edit</a>
+    | <a href="{% url 'post-delete' post.pk %}">Delete</a>
+{% endif %}
+{% endblock %}
+
