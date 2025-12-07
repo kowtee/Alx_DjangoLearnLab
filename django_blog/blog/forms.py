@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Post, Comment, Tag
 from .models import Comment
 
 
@@ -22,9 +22,38 @@ class UserUpdateForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+    tags = forms.CharField(
+        required=False,
+        help_text="Enter tags separated by commas."
+    )
+
     class Meta:
         model = Post
-        fields = ("title", "content")
+        fields = ("title", "content", "tags")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            existing = self.instance.tags.values_list("name", flat=True)
+            self.fields["tags"].initial = ", ".join(existing)
+
+    def save(self, commit=True):
+        post = super().save(commit=False)
+
+        if commit:
+            post.save()
+
+        tags_str = self.cleaned_data.get("tags", "")
+        tag_names = [t.strip() for t in tags_str.split(",") if t.strip()]
+
+        tag_objs = []
+        for name in tag_names:
+            tag, _ = Tag.objects.get_or_create(name=name)
+            tag_objs.append(tag)
+
+        post.tags.set(tag_objs)
+
+        return post
 
 class CommentForm(forms.ModelForm):
     class Meta:

@@ -7,10 +7,11 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.db.models import Q
 
 
 from .forms import CustomUserCreationForm, UserUpdateForm, PostForm, CommentForm
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 
 
 # -----------------------
@@ -145,4 +146,25 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse("post-detail", kwargs={"pk": self.object.post.pk})
+
+def posts_by_tag(request, tag_name):
+    tag = get_object_or_404(Tag, name=tag_name)
+    posts = Post.objects.filter(tags=tag).order_by("-published_date")
+    return render(request, "blog/tag_posts.html", {"tag": tag, "posts": posts})
+
+def search_posts(request):
+    query = request.GET.get("q", "").strip()
+    results = Post.objects.none()
+
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct().order_by("-published_date")
+
+    return render(request, "blog/search_results.html", {
+        "query": query,
+        "posts": results
+    })
 

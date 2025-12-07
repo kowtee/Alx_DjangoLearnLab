@@ -31,6 +31,10 @@ urlpatterns = [
     # Comments (singular post paths - checker safety)
     path("post/<int:post_id>/comments/new/", views.CommentCreateView.as_view(), name="comment-create-singular"),
  
+    # Tag + Search
+    path("tags/<str:tag_name>/", views.posts_by_tag, name="posts-by-tag"),
+    path("search/", views.search_posts, name="search-posts"),
+    path("tag/<str:tag_name>/", views.posts_by_tag, name="posts-by-tag-alt"),
 
 
 ]
