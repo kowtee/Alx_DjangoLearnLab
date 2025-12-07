@@ -1,0 +1,27 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+
+{% if form.instance.pk %}
+    <h2>Edit Comment</h2>
+{% else %}
+    <h2>New Comment</h2>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+
+<p>
+    {% if form.instance.pk %}
+        <a href="{% url 'post-detail' form.instance.post.pk %}">Back to post</a>
+    {% elif post %}
+        <a href="{% url 'post-detail' post.pk %}">Back to post</a>
+    {% endif %}
+</p>
+{% endblock %}
+
